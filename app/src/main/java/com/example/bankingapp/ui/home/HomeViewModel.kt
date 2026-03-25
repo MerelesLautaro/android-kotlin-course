@@ -12,6 +12,7 @@ import com.example.bankingapp.domain.repository.DashboardRepository
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
 
 class HomeViewModel(
     private val authRepository: AuthRepository,
@@ -87,6 +88,42 @@ class HomeViewModel(
             tokenManager.clearToken()
 
             onComplete()
+
+        }
+
+    }
+
+    fun deposit(amount: BigDecimal) {
+
+        viewModelScope.launch {
+
+            accountRepository.deposit(amount)
+
+            loadDashboard()
+
+        }
+
+    }
+
+    fun withdraw(amount: BigDecimal) {
+
+        viewModelScope.launch {
+
+            accountRepository.withdraw(amount)
+
+            loadDashboard()
+
+        }
+
+    }
+
+    fun transfer(amount: BigDecimal, targetAccount: String) {
+
+        viewModelScope.launch {
+
+            accountRepository.transfer(amount, targetAccount)
+
+            loadDashboard()
 
         }
 

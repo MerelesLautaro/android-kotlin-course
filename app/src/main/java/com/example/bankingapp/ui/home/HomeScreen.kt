@@ -19,6 +19,8 @@ import com.example.bankingapp.ui.components.ActionButtons
 import com.example.bankingapp.ui.components.BalanceCard
 import com.example.bankingapp.ui.components.HomeHeaderBackground
 import com.example.bankingapp.ui.components.TransactionList
+import com.example.bankingapp.ui.components.TransactionAction
+import com.example.bankingapp.ui.components.TransactionDialog
 
 @Composable
 fun HomeScreen(
@@ -26,6 +28,8 @@ fun HomeScreen(
 ) {
     val context = LocalContext.current
     val container = ServiceLocator.provideContainer(context)
+
+    var currentAction by remember { mutableStateOf<TransactionAction?>(null) }
 
     val viewModel: HomeViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
@@ -141,7 +145,21 @@ fun HomeScreen(
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            ActionButtons()
+            ActionButtons(
+
+                onDepositClick = {
+                    currentAction = TransactionAction.DEPOSIT
+                },
+
+                onWithdrawClick = {
+                    currentAction = TransactionAction.WITHDRAW
+                },
+
+                onTransferClick = {
+                    currentAction = TransactionAction.TRANSFER
+                }
+
+            )
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -167,6 +185,38 @@ fun HomeScreen(
 
             TransactionList(
                 transactions = state.transactions
+            )
+
+        }
+        currentAction?.let { action ->
+
+            TransactionDialog(
+
+                action = action,
+
+                onDismiss = {
+                    currentAction = null
+                },
+
+                onConfirm = { amount, account ->
+
+                    when (action) {
+
+                        TransactionAction.DEPOSIT ->
+                            viewModel.deposit(amount)
+
+                        TransactionAction.WITHDRAW ->
+                            viewModel.withdraw(amount)
+
+                        TransactionAction.TRANSFER ->
+                            viewModel.transfer(amount, account!!)
+
+                    }
+
+                    currentAction = null
+
+                }
+
             )
 
         }

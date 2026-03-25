@@ -13,7 +13,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun ActionButtons() {
+fun ActionButtons(
+    onDepositClick: () -> Unit,
+    onWithdrawClick: () -> Unit,
+    onTransferClick: () -> Unit
+) {
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -24,21 +28,21 @@ fun ActionButtons() {
             text = "Ingresar",
             icon = Icons.Default.ArrowDownward,
             modifier = Modifier.weight(1f),
-            onClick = {}
+            onClick = onDepositClick
         )
 
         ActionButton(
             text = "Retirar",
             icon = Icons.Default.ArrowUpward,
             modifier = Modifier.weight(1f),
-            onClick = {}
+            onClick = onWithdrawClick
         )
 
         ActionButton(
             text = "Transferir",
             icon = Icons.Default.SwapHoriz,
             modifier = Modifier.weight(1f),
-            onClick = {}
+            onClick = onTransferClick
         )
 
     }
