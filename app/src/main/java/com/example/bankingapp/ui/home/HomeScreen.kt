@@ -16,10 +16,16 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.bankingapp.data.local.TokenManager
 import com.example.bankingapp.data.remote.RetrofitClient
+import com.example.bankingapp.data.remote.api.AccountApi
+import com.example.bankingapp.data.remote.api.AuthApi
+import com.example.bankingapp.data.remote.api.DashboardApi
+import com.example.bankingapp.data.repository.AccountRepositoryImpl
 import com.example.bankingapp.data.repository.AuthRepositoryImpl
+import com.example.bankingapp.data.repository.DashboardRepositoryImpl
 import com.example.bankingapp.ui.components.ActionButtons
 import com.example.bankingapp.ui.components.BalanceCard
 import com.example.bankingapp.ui.components.HomeHeaderBackground
+import com.example.bankingapp.ui.components.TransactionList
 
 @Composable
 fun HomeScreen(
@@ -34,10 +40,23 @@ fun HomeScreen(
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
                 val tokenManager = TokenManager(context)
-                val api = RetrofitClient.create(context)
-                val repository = AuthRepositoryImpl(api)
 
-                return HomeViewModel(repository, tokenManager) as T
+                val retrofit = RetrofitClient.create(context)
+
+                val authApi = retrofit.create(AuthApi::class.java)
+                val dashboardApi = retrofit.create(DashboardApi::class.java)
+                val accountApi = retrofit.create(AccountApi::class.java)
+
+                val authRepository = AuthRepositoryImpl(authApi)
+                val dashboardRepository = DashboardRepositoryImpl(dashboardApi)
+                val accountRepository = AccountRepositoryImpl(accountApi)
+
+                return HomeViewModel(
+                    authRepository,
+                    dashboardRepository,
+                    accountRepository,
+                    tokenManager
+                ) as T
             }
 
         }
@@ -112,6 +131,17 @@ fun HomeScreen(
 
         }
 
+        if (state.isLoading) {
+
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -150,6 +180,12 @@ fun HomeScreen(
                 )
 
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            TransactionList(
+                transactions = state.transactions
+            )
 
         }
 

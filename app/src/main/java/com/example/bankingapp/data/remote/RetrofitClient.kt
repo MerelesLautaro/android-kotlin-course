@@ -1,7 +1,6 @@
 package com.example.bankingapp.data.remote
 
 import android.content.Context
-import com.example.bankingapp.data.remote.api.AuthApi
 import com.example.bankingapp.data.remote.util.ApiConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -12,7 +11,7 @@ import com.example.bankingapp.data.local.TokenManager
 
 object RetrofitClient {
 
-    fun create(context: Context): AuthApi {
+    fun create(context: Context): Retrofit {
 
         val tokenManager = TokenManager(context)
 
@@ -25,14 +24,11 @@ object RetrofitClient {
             .addInterceptor(logging)
             .build()
 
-        val retrofit = Retrofit.Builder()
+        return Retrofit.Builder()
             .baseUrl(ApiConfig.BASE_URL)
             .client(client)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-
-        return retrofit.create(AuthApi::class.java)
-
     }
 
 }

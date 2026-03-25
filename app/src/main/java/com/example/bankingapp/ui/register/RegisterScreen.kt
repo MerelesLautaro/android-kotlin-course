@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.bankingapp.data.remote.RetrofitClient
+import com.example.bankingapp.data.remote.api.AuthApi
 import com.example.bankingapp.data.repository.AuthRepositoryImpl
 import com.example.bankingapp.ui.components.AuthBackground
 import com.example.bankingapp.ui.components.AuthButton
@@ -30,16 +31,20 @@ fun RegisterScreen(
 
     val context = LocalContext.current
 
+
     val viewModel: RegisterViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-                val api = RetrofitClient.create(context)
-                val repository = AuthRepositoryImpl(api)
+                val retrofit = RetrofitClient.create(context)
+                val authApi = retrofit.create(AuthApi::class.java)
+
+                val repository = AuthRepositoryImpl(authApi)
 
                 return RegisterViewModel(repository) as T
             }
+
         }
     )
 
