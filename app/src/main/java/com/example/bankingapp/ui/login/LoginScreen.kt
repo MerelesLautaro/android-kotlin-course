@@ -7,22 +7,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.bankingapp.data.local.TokenManager
+import com.example.bankingapp.data.remote.RetrofitClient
+import com.example.bankingapp.data.repository.AuthRepositoryImpl
 import com.example.bankingapp.ui.components.AuthBackground
 import com.example.bankingapp.ui.components.AuthButton
 import com.example.bankingapp.ui.components.AuthErrorMessage
 import com.example.bankingapp.ui.components.AuthRedirectText
 import com.example.bankingapp.ui.components.AuthTextField
-import kotlin.getValue
 
 @Composable
 fun LoginScreen(
-    navController: NavController,
-    viewModel: LoginViewModel = viewModel()
+    navController: NavController
 ) {
 
-    val state by viewModel::state
+    val context = LocalContext.current
+
+    val viewModel: LoginViewModel = viewModel(
+        factory = object : ViewModelProvider.Factory {
+
+            override fun <T : ViewModel> create(modelClass: Class<T>): T {
+
+                val tokenManager = TokenManager(context)
+
+                val api = RetrofitClient.create(context)
+                val repository = AuthRepositoryImpl(api)
+
+                return LoginViewModel(tokenManager, repository) as T
+            }
+        }
+    )
+
+    val state = viewModel.state
 
     Box(
         modifier = Modifier.fillMaxSize()

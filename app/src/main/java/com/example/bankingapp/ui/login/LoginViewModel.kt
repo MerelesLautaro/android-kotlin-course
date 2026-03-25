@@ -4,12 +4,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.example.bankingapp.data.local.TokenManager
+import com.example.bankingapp.domain.repository.AuthRepository
+import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(
+    private val tokenManager: TokenManager,
+    private val repository: AuthRepository
+
+) : ViewModel() {
 
     var state by mutableStateOf(LoginState())
         private set
-
 
     fun onIdentifierChange(value: String) {
         state = state.copy(identifier = value)
@@ -26,7 +33,34 @@ class LoginViewModel : ViewModel() {
             return
         }
 
-        // CALL API
+        state = state.copy(error = null)
+
+        viewModelScope.launch {
+
+            val result = repository.login(
+                state.identifier,
+                state.password
+            )
+
+            result.onSuccess { token ->
+
+                viewModelScope.launch {
+
+                    tokenManager.saveToken(token)
+
+                }
+
+            }
+                .onFailure {
+
+                    state = state.copy(
+                        error = it.message ?: "Unknow error"
+                    )
+
+                }
+
+        }
+
     }
 
 }

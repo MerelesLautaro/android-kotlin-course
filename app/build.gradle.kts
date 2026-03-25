@@ -65,4 +65,12 @@ dependencies {
 
     implementation(libs.androidx.activity.compose.v182)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.androidx.datastore.preferences)
+
+    implementation(libs.logging.interceptor)
+
+    implementation(libs.kotlinx.coroutines.android)
 }
