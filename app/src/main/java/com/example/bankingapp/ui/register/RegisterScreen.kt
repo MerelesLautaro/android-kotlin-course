@@ -17,6 +17,7 @@ import androidx.navigation.NavController
 import com.example.bankingapp.data.remote.RetrofitClient
 import com.example.bankingapp.data.remote.api.AuthApi
 import com.example.bankingapp.data.repository.AuthRepositoryImpl
+import com.example.bankingapp.di.ServiceLocator
 import com.example.bankingapp.ui.components.AuthBackground
 import com.example.bankingapp.ui.components.AuthButton
 import com.example.bankingapp.ui.components.AuthErrorMessage
@@ -30,19 +31,17 @@ fun RegisterScreen(
 ) {
 
     val context = LocalContext.current
-
+    val container = ServiceLocator.provideContainer(context)
 
     val viewModel: RegisterViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-                val retrofit = RetrofitClient.create(context)
-                val authApi = retrofit.create(AuthApi::class.java)
+                return RegisterViewModel(
+                    container.authRepository
+                ) as T
 
-                val repository = AuthRepositoryImpl(authApi)
-
-                return RegisterViewModel(repository) as T
             }
 
         }

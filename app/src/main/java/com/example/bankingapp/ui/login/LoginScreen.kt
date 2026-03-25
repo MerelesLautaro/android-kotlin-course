@@ -13,10 +13,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.bankingapp.data.local.TokenManager
-import com.example.bankingapp.data.remote.RetrofitClient
-import com.example.bankingapp.data.remote.api.AuthApi
-import com.example.bankingapp.data.repository.AuthRepositoryImpl
+import com.example.bankingapp.di.ServiceLocator
 import com.example.bankingapp.ui.components.AuthBackground
 import com.example.bankingapp.ui.components.AuthButton
 import com.example.bankingapp.ui.components.AuthErrorMessage
@@ -29,20 +26,18 @@ fun LoginScreen(
 ) {
 
     val context = LocalContext.current
+    val container = ServiceLocator.provideContainer(context)
 
     val viewModel: LoginViewModel = viewModel(
         factory = object : ViewModelProvider.Factory {
 
             override fun <T : ViewModel> create(modelClass: Class<T>): T {
 
-                val tokenManager = TokenManager(context)
+                return LoginViewModel(
+                    container.tokenManager,
+                    container.authRepository
+                ) as T
 
-                val retrofit = RetrofitClient.create(context)
-                val authApi = retrofit.create(AuthApi::class.java)
-
-                val repository = AuthRepositoryImpl(authApi)
-
-                return LoginViewModel(tokenManager, repository) as T
             }
 
         }
