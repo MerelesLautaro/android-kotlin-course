@@ -5,6 +5,10 @@ El objetivo de este proyecto fue practicar desarrollo moderno en Android utiliza
 
 La aplicación permite visualizar información de cuenta, historial de transacciones y realizar operaciones básicas como **depósitos, retiros y transferencias**.
 
+![Descripción de la imagen 1](login.jpeg)
+![Descripción de la imagen 2](home.jpeg)
+
+
 ---
 
 # Arquitectura
