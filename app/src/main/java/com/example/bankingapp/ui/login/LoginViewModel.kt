@@ -27,7 +27,6 @@ class LoginViewModel(
     }
 
     fun onLoginClick() {
-
         if (state.identifier.isBlank() || state.password.isBlank()) {
             state = state.copy(error = "Todos los campos son obligatorios")
             return
@@ -36,31 +35,22 @@ class LoginViewModel(
         state = state.copy(error = null)
 
         viewModelScope.launch {
-
             val result = repository.login(
                 state.identifier,
                 state.password
             )
 
             result.onSuccess { token ->
+                tokenManager.saveToken(token)
 
-                viewModelScope.launch {
-
-                    tokenManager.saveToken(token)
-
-                }
-
+                state = state.copy(isSuccess = true)
             }
                 .onFailure {
-
                     state = state.copy(
-                        error = it.message ?: "Unknow error"
+                        error = it.message ?: "Unknown error"
                     )
-
                 }
-
         }
-
     }
 
 }

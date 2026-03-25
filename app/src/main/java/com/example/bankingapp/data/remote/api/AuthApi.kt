@@ -6,6 +6,7 @@ import com.example.bankingapp.data.remote.dto.TokenResponseDto
 import com.example.bankingapp.data.remote.util.ApiConfig
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.GET
 import retrofit2.http.POST
 
 interface AuthApi {
@@ -19,5 +20,9 @@ interface AuthApi {
     suspend fun register(
         @Body request: RegisterRequestDto
     ): Response<Unit>
+
+
+    @GET("${ApiConfig.USERS}/logout")
+    suspend fun logout(): Response<Unit>
 
 }

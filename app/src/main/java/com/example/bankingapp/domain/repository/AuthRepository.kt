@@ -13,4 +13,6 @@ interface AuthRepository {
         password: String
     ): Result<Unit>
 
+    suspend fun logout(): Result<Unit>
+
 }

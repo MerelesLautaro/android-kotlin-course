@@ -79,4 +79,30 @@ class AuthRepositoryImpl(
 
     }
 
+    override suspend fun logout(): Result<Unit> {
+
+        return try {
+
+            val response = api.logout()
+
+            if (response.isSuccessful) {
+
+                Result.success(Unit)
+
+            } else {
+
+                val errorMessage = ErrorParser.parseError(response)
+
+                Result.failure(Exception(errorMessage))
+
+            }
+
+        } catch (e: Exception) {
+
+            Result.failure(e)
+
+        }
+
+    }
+
 }

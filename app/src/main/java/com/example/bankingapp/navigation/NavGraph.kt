@@ -4,8 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.bankingapp.ui.home.HomeScreen
 import com.example.bankingapp.ui.login.LoginScreen
 import com.example.bankingapp.ui.register.RegisterScreen
+import com.example.bankingapp.ui.session.SplashScreen
 
 @Composable
 fun NavGraph() {
@@ -14,8 +16,12 @@ fun NavGraph() {
 
     NavHost(
         navController = navController,
-        startDestination = "login"
+        startDestination = "splash"
     ) {
+
+        composable("splash") {
+            SplashScreen(navController)
+        }
 
         composable("login") {
             LoginScreen(navController)
@@ -23,6 +29,10 @@ fun NavGraph() {
 
         composable("register") {
             RegisterScreen(navController)
+        }
+
+        composable("home") {
+            HomeScreen(navController)
         }
 
     }
