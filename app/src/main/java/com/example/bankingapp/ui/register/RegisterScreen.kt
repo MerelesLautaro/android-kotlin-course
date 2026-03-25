@@ -1,4 +1,4 @@
-package com.example.bankingapp.ui.login
+package com.example.bankingapp.ui.register
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
@@ -17,11 +17,10 @@ import com.example.bankingapp.ui.components.AuthTextField
 import kotlin.getValue
 
 @Composable
-fun LoginScreen(
+fun RegisterScreen(
     navController: NavController,
-    viewModel: LoginViewModel = viewModel()
+    viewModel: RegisterViewModel = viewModel()
 ) {
-
     val state by viewModel::state
 
     Box(
@@ -39,7 +38,7 @@ fun LoginScreen(
         ) {
 
             Text(
-                text = "Login",
+                text = "Register",
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(bottom = 24.dp)
             )
@@ -49,8 +48,14 @@ fun LoginScreen(
             ) {
 
                 AuthTextField(
-                    value = state.identifier,
-                    onValueChange = { viewModel.onIdentifierChange(it) },
+                    value = state.name,
+                    onValueChange = { viewModel.onNameChange(it) },
+                    label = "Name"
+                )
+
+                AuthTextField(
+                    value = state.email,
+                    onValueChange = { viewModel.onEmailChange(it) },
                     label = "Email"
                 )
 
@@ -66,16 +71,16 @@ fun LoginScreen(
                 )
 
                 AuthButton(
-                    text = "Sign in",
-                    onClick = { viewModel.onLoginClick() }
+                    text = "Sign up",
+                    onClick = { viewModel.onRegisterClick() }
                 )
 
                 AuthRedirectText(
-                    text = "¿No tenés una cuenta?",
-                    actionText = "Registrate",
+                    text = "¿Ya tenés una cuenta?",
+                    actionText = "Iniciar sesión",
                     onClick = {
-                        navController.navigate("register") {
-                            popUpTo("login") { inclusive = true }
+                        navController.navigate("login") {
+                            popUpTo("register") { inclusive = true }
                         }
                     }
                 )
@@ -85,5 +90,4 @@ fun LoginScreen(
         }
 
     }
-
 }

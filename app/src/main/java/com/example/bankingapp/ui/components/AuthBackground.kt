@@ -17,22 +17,23 @@ fun AuthBackground() {
         val width = size.width
         val height = size.height
 
-        val path = Path().apply {
+        // TOP WAVE
+        val topPath = Path().apply {
 
-            moveTo(0f, height * 0.3f)
+            moveTo(0f, height * 0.2f)
 
-            quadraticBezierTo(
+            quadraticTo(
                 width * 0.25f,
-                height * 0.4f,
+                height * 0.3f,
                 width * 0.5f,
-                height * 0.3f
+                height * 0.2f
             )
 
-            quadraticBezierTo(
+            quadraticTo(
                 width * 0.75f,
-                height * 0.2f,
+                height * 0.1f,
                 width,
-                height * 0.3f
+                height * 0.2f
             )
 
             lineTo(width, 0f)
@@ -41,10 +42,37 @@ fun AuthBackground() {
         }
 
         drawPath(
-            path = path,
+            path = topPath,
             color = Color(0xFF1976D2)
         )
 
-    }
+        // BOTTOM WAVE
+        val bottomPath = Path().apply {
 
+            moveTo(0f, height * 0.8f)
+
+            quadraticTo(
+                width * 0.25f,
+                height * 0.7f,
+                width * 0.5f,
+                height * 0.8f
+            )
+
+            quadraticTo(
+                width * 0.75f,
+                height * 0.9f,
+                width,
+                height * 0.8f
+            )
+
+            lineTo(width, height)
+            lineTo(0f, height)
+            close()
+        }
+
+        drawPath(
+            path = bottomPath,
+            color = Color(0xFF1976D2)
+        )
+    }
 }

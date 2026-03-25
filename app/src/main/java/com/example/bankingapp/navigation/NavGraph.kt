@@ -5,6 +5,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.bankingapp.ui.login.LoginScreen
+import com.example.bankingapp.ui.register.RegisterScreen
 
 @Composable
 fun NavGraph() {
@@ -17,7 +18,11 @@ fun NavGraph() {
     ) {
 
         composable("login") {
-            LoginScreen()
+            LoginScreen(navController)
+        }
+
+        composable("register") {
+            RegisterScreen(navController)
         }
 
     }

@@ -26,7 +26,7 @@ class LoginViewModel : ViewModel() {
             return
         }
 
-        // luego aquí llamaremos a la API
+        // CALL API
     }
 
 }
