@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.bankingapp.domain.repository.AuthRepository
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.delay
 
 class RegisterViewModel(
     private val repository: AuthRepository
